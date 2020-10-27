@@ -14,15 +14,40 @@
 
         let imageFile = e.clipboardData.items[0].getAsFile();
 
+
+        const canv = document.querySelector("canvas");
+        const context = canv.getContext("2d");
+
+
+        const chara = new Image();
+        chara.onload = (e) => {
+            let img = document.querySelector("#outputImage");
+            canv.height = img.height;
+            context.drawImage(chara, 0, 0, img.width, img.height);
+            let imgData = context.getImageData(0, 0, img.width, img.height);
+            let qr = jsQR(imgData.data, img.width, img.height);
+            if (qr) {
+                console.log("Found", qr);
+                document.querySelector("#qrContents").textContent = qr.data;
+            }
+        };
+
         let fr = new FileReader();
         fr.onload = function (e) {
             let base64 = e.target.result;
             document.querySelector("#outputImage").src = base64;
-            document.querySelector("outputText").textContent = base64;
+            document.querySelector("#outputText").textContent = base64;
+
+            chara.src = base64;
         };
+
+
+
+
         fr.readAsDataURL(imageFile);
 
         this.innerHTML = "paste image here";
+
     });
 
 

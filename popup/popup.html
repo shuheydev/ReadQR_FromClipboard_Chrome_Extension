@@ -12,13 +12,16 @@
     <div contenteditable="true" width="50px" height="50px">
         paste image here
     </div>
-    <img id="outputImage" border="1" width="50%">
+    <img id="outputImage" border="1">
     <textarea id="outputText"></textarea>
+    <canvas id="canvas" border="3"></canvas>
+    <textarea id="qrContents"></textarea>
 
-    <button id="button_newTab" class="btn info">New Tab</button>
-    <button id="button_newWindow" class="btn info">New Window</button>
+    <!-- <button id="button_newTab" class="btn info">New Tab</button>
+    <button id="button_newWindow" class="btn info">New Window</button> -->
 </body>
 
 <script src="popup.js"></script>
+<script src="jsQR.js"></script>
 
 </html>
