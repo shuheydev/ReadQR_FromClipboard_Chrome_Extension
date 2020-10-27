@@ -3,7 +3,7 @@
         window.browser = chrome;
     }
 
-    let elem = document.querySelector("[contenteditable]");
+    let elem = document.querySelector("#pasteArea");
     elem.addEventListener("paste", function (e) {
         if (!e.clipboardData
             || !e.clipboardData.types
@@ -14,7 +14,6 @@
 
         let imageFile = e.clipboardData.items[0].getAsFile();
 
-
         const canv = document.querySelector("canvas");
         const context = canv.getContext("2d");
 
@@ -22,10 +21,13 @@
         const chara = new Image();
         chara.onload = (e) => {
             let img = document.querySelector("#outputImage");
-            canv.height = img.height;
-            context.drawImage(chara, 0, 0, img.width, img.height);
-            let imgData = context.getImageData(0, 0, img.width, img.height);
-            let qr = jsQR(imgData.data, img.width, img.height);
+            // canv.height = img.height;
+
+            console.log(chara);
+
+            context.drawImage(chara, 0, 0, canv.width, canv.height,);
+            let imgData = context.getImageData(0, 0, canv.width, canv.height);
+            let qr = jsQR(imgData.data, imgData.width, imgData.height);
             if (qr) {
                 console.log("Found", qr);
                 document.querySelector("#qrContents").textContent = qr.data;
