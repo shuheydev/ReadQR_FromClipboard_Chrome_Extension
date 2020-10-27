@@ -7,18 +7,14 @@
 </head>
 
 <body>
-    <button id="button_currentTab" class="btn info">Get data</button>
-    <label id="testLabel">hello</label>
-    <div id="pasteArea" contenteditable="false" width="50px" height="50px">
-        paste image here
+    <div id="pasteArea" class="box" contenteditable="false" class="info">
+        Click Here! Then paste(Ctrl+V) image that include QR code.
     </div>
-    <img id="outputImage" border="1" width="300px">
-    <textarea id="outputText"></textarea>
-    <canvas id="canvas" border="3" style="display:none"></canvas>
-    <textarea id="qrContents"></textarea>
+    <img id="clipboardImage">
+    <canvas id="canvas_for_ImageData" style="display:none"></canvas>
+    <div id="decodeResult" class="result" contenteditable="true"></div>
 
-    <!-- <button id="button_newTab" class="btn info">New Tab</button>
-    <button id="button_newWindow" class="btn info">New Window</button> -->
+    <button id="button_OpenUrl" class="btn info">Open Url</button>
 </body>
 
 <script src="popup.js"></script>

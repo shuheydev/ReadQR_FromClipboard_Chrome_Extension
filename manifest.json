@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "Read QR code from Clipboard",
+    "name": "QR Clip and Scan",
     "version": "0.0.0.1",
     "icons": {
         "128": "icons/icon.png"
@@ -9,13 +9,12 @@
         "default_icon": {
             "128": "icons/icon.png"
         },
-        "default_title": "Read QR code from Clipboard",
+        "default_title": "QR Clip and Scan",
         "default_popup": "popup/popup.html",
         "browser_style": false
     },
     "permissions": [
         "tabs",
-        "clipboardRead",
-        "clipboardWrite"
+        "clipboardRead"
     ]
 }

@@ -3,6 +3,34 @@ Reference:
 https://www.w3schools.com/howto/howto_css_outline_buttons.asp
 */
 
+body{
+  padding: 10px;
+  width: 300px;
+}
+
+img{
+  width: 100%;
+}
+
+.box{
+  margin: 5px;
+  padding: 25px;
+  border: dashed 3px dodgerblue;
+  text-align: center;
+  cursor: copy;
+}
+
+.box:hover {
+  background-color: #2195f33f;
+}
+
+
+.result{
+  margin: 5px;
+  padding: 5px;
+}
+
+/* Button */
 .btn {
   border: 2px solid black;
   background-color: white;
@@ -11,12 +39,11 @@ https://www.w3schools.com/howto/howto_css_outline_buttons.asp
   font-size: 16px;
   cursor: pointer;
   white-space: nowrap;
-  margin:5px;
-  width: 95%;
+  margin: 5px;
+  width: 98%;
   outline: none;
 }
 
-/* Blue */
 .info {
   border-color: #2196F3;
   color: dodgerblue

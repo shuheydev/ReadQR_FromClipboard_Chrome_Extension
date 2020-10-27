@@ -4,7 +4,12 @@
     }
 
     let elem = document.querySelector("#pasteArea");
+    elem.addEventListener("click", (e) => {
+        elem.style.backgroundColor = "#D5FFD1";
+    });
     elem.addEventListener("paste", function (e) {
+        //guard non image contents.
+        //reference: https://qiita.com/tatesuke/items/00de1c6be89bad2a6a72
         if (!e.clipboardData
             || !e.clipboardData.types
             || (e.clipboardData.types.length != 1)
@@ -12,131 +17,62 @@
             return true;
         }
 
+        //Get image from clipboard as file
         let imageFile = e.clipboardData.items[0].getAsFile();
 
-        const canv = document.querySelector("canvas");
-        const context = canv.getContext("2d");
+        //get canvas element and context
+        const canvas = document.querySelector("#canvas_for_ImageData");
+        const context = canvas.getContext("2d");
 
-
+        //Create Image object
         const chara = new Image();
+        //execute when image loaded to Image object
         chara.onload = (e) => {
-            let img = document.querySelector("#outputImage");
-            // canv.height = img.height;
+            //draw loaded image on canvas
+            context.drawImage(chara, 0, 0, canvas.width, canvas.height,);
 
-            console.log(chara);
+            //get ImageData from canvas
+            let imgData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-            context.drawImage(chara, 0, 0, canv.width, canv.height,);
-            let imgData = context.getImageData(0, 0, canv.width, canv.height);
+            //Decode QR code in the image.
             let qr = jsQR(imgData.data, imgData.width, imgData.height);
             if (qr) {
                 console.log("Found", qr);
-                document.querySelector("#qrContents").textContent = qr.data;
+                document.querySelector("#decodeResult").textContent = qr.data;
             }
         };
 
         let fr = new FileReader();
         fr.onload = function (e) {
             let base64 = e.target.result;
-            document.querySelector("#outputImage").src = base64;
-            document.querySelector("#outputText").textContent = base64;
+            //for preview
+            document.querySelector("#clipboardImage").src = base64;
 
+            //Set image to Image object
+            //onload event will be fired.
             chara.src = base64;
         };
 
-
-
-
+        //Read image data from image file
         fr.readAsDataURL(imageFile);
-
-        this.innerHTML = "paste image here";
-
     });
 
-
-    let button_currentTab = document.querySelector("#button_currentTab");
-    button_currentTab.addEventListener('click', (e) => {
-        console.log('Get data');
-
-        let label = document.getElementById('testLabel');
-        navigator.clipboard.readText().then(text => label.innerText = text);
-
-    });
-
-    let button_newTab = document.querySelector("#button_newTab");
+    let button_newTab = document.querySelector("#button_OpenUrl");
     button_newTab.addEventListener('click', (e) => {
-        console.log('New Tab');
+        console.log('Open Url');
+
+        let url = document.querySelector("#decodeResult").innerText;
+        if (url === "") {
+            return;
+        }
 
         browser.tabs.query({ active: true, currentWindow: true }, tabs => {
-            let url = tabs[0].url;
             let index = tabs[0].index;
 
-            //対象サイトに絞る
-            if (!isTargetSites(url)) {
-                window.close();
-                return;
-            }
-
-            //言語を日本語に変更
-            let newUrl = changeLanguage(url);
-
-            //urlを別タブで開く(現在のタブのとなり)
-            browser.tabs.create({ url: newUrl, index: index + 1 });
+            //Open the url on tab that next to current tab
+            browser.tabs.create({ url: url, index: index + 1 });
 
             window.close();
         });
     });
-
-    let button_newWindow = document.querySelector("#button_newWindow");
-    button_newWindow.addEventListener('click', (e) => {
-        console.log('New Window');
-
-        browser.tabs.query({ active: true, currentWindow: true }, tabs => {
-            let url = tabs[0].url;
-            console.log(tabs);
-
-            //対象サイトに絞る
-            if (!isTargetSites(url)) {
-                window.close();
-                return;
-            }
-
-            //言語を日本語に変更
-            let newUrl = changeLanguage(url);
-
-            //urlを別ウィンドウで開く
-            browser.windows.create({ url: newUrl });
-
-            window.close();
-        });
-    });
-
-    //対象サイトか否かをチェック
-    //*.microsoft.com
-    function isTargetSites(url) {
-        const re = /^https:\/\/.+?\.microsoft\.com\/.*$/gi;
-        return re.test(url);
-    }
-
-    //日英切り替え
-    //日本語は英語に
-    //日本語以外は日本語に
-    function changeLanguage(url) {
-        const reLang = /(?<=https:\/\/.+?\.microsoft\.com\/).*?(?=\/)/gi;
-        let result = url.match(reLang);
-
-        if (result === null) {
-            return "";
-        }
-        let lang = result[0];
-
-        let replacement = "";
-        if (lang === "ja-jp") {
-            replacement = "en-us";
-        }
-        else {
-            replacement = "ja-jp";
-        }
-
-        return url.replace(reLang, replacement);
-    }
 })();
